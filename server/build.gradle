@@ -24,22 +24,6 @@ apply plugin: 'propdeps'
 apply plugin: 'propdeps-maven'
 apply plugin: 'propdeps-idea'
 
-jar {
-    baseName = 'spring-react'
-    version = '0.0.1-SNAPSHOT'
-    from('../client/dist') {
-        into 'static'
-    }
-}
-
-war {
-    baseName = 'spring-react'
-    version = '0.0.1-SNAPSHOT'
-    from('../client/dist') {
-        into 'static'
-    }
-}
-
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
@@ -57,9 +41,6 @@ dependencies {
     compile 'org.springframework.boot:spring-boot-devtools'
     compile 'org.springframework.boot:spring-boot-starter-web'
 }
-
-jar.dependsOn(':client:assemble')
-war.dependsOn(':client:assemble')
 
 bootRepackage {
     withJarTask jar

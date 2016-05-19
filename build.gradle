@@ -1,3 +1,29 @@
 task wrapper(type: Wrapper) {
     gradleVersion = '2.13'
 }
+
+evaluationDependsOn ":client"
+evaluationDependsOn ":server"
+
+project(':server') {
+
+    jar {
+        baseName = 'spring-react'
+        version = '0.0.1-SNAPSHOT'
+        from('../client/dist') {
+            into 'static'
+        }
+    }
+
+    war {
+        baseName = 'spring-react'
+        version = '0.0.1-SNAPSHOT'
+        from('../client/dist') {
+            into 'static'
+        }
+    }
+
+    jar.dependsOn(':client:assemble')
+    war.dependsOn(':client:assemble')
+
+}
