@@ -7,23 +7,14 @@ evaluationDependsOn ":server"
 
 project(':server') {
 
-    jar {
-        baseName = 'spring-react'
-        version = '0.0.1-SNAPSHOT'
-        from('../client/dist') {
-            into 'static'
-        }
-    }
-
     war {
         baseName = 'spring-react'
         version = '0.0.1-SNAPSHOT'
         from('../client/dist') {
-            into 'static'
+            into 'WEB-INF/classes/static'
         }
     }
 
-    jar.dependsOn(':client:assemble')
     war.dependsOn(':client:assemble')
 
 }
