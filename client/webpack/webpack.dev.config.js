@@ -23,6 +23,7 @@ module.exports = {
     ],
     output: {
         path: path.join(ABSOLUTE_BASE, 'dist'),
+        publicPath: `${URL}/`,
         filename: 'bundle.js'
     },
     plugins: [
