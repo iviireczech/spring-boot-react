@@ -16,13 +16,15 @@
       "command": "webpack-dev-server --config webpack/webpack.dev.config.js",
       "env": {
         "NODE_ENV": "development",
-        "PORT": 8000
+        "PORT": "8000",
+        "API_PORT": "8080"
       }
     },
     "bundle": {
       "command": "webpack -p --config webpack/webpack.prod.config.js",
       "env": {
-        "NODE_ENV": "production"
+        "NODE_ENV": "production",
+        "API_PORT": "8080"
       }
     }
   },
