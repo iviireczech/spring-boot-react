@@ -16,6 +16,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.token.AccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
@@ -49,7 +50,7 @@ public class OAuth2Config {
         private AuthenticationManager authenticationManager;
 
         @Autowired
-        private TokenStore tokenStore;
+        private AccessTokenConverter accessTokenConverter;
 
         @Override
         public void configure(final ClientDetailsServiceConfigurer clients) throws Exception {
@@ -67,7 +68,7 @@ public class OAuth2Config {
         public void configure(final AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
             endpoints
                     .authenticationManager(authenticationManager)
-                    .tokenStore(tokenStore)
+                    .accessTokenConverter(accessTokenConverter)
                     .getFrameworkEndpointHandlerMapping().setOrder(Ordered.HIGHEST_PRECEDENCE);
 
         }
@@ -78,14 +79,10 @@ public class OAuth2Config {
     @EnableResourceServer
     protected static class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
-        @Autowired
-        private TokenStore tokenStore;
-
         @Override
         public void configure(final ResourceServerSecurityConfigurer resources) throws Exception {
             resources
-                    .resourceId(RESOURCE_ID)
-                    .tokenStore(tokenStore);
+                    .resourceId(RESOURCE_ID);
         }
 
         @Override
