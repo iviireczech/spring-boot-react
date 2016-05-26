@@ -69,7 +69,7 @@ export function loginUser(credentials, redirect) {
                 else {
                     dispatch(receiveLogin(response.data.access_token));
                     localStorage.setItem('access_token', response.data.access_token);
-                    dispatch(push(redirect || '/dashboard'));
+                    dispatch(push(redirect || '/info'));
                 }
             })
             .catch(error => dispatch(loginError({status: 500, statusText: error.message})));
