@@ -37,7 +37,7 @@ export function getInfo() {
     let requestConfig = {
         method: 'get',
         baseURL: config.apiUrl,
-        url: '/api/info',
+        url: '/info',
         headers: {
             "Authorization": "Bearer " + localStorage.getItem('access_token')
         }

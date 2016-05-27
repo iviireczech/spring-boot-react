@@ -41,8 +41,7 @@ export function loginUser(credentials, redirect) {
 
     let requestConfig = {
         method: 'post',
-        baseURL: config.apiUrl,
-        url: '/oauth/token',
+        url: config.tokenUrl,
         headers: {
             "Content-Type": "application/x-www-form-urlencoded"
         },
