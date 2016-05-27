@@ -56,6 +56,9 @@ export function loginUser(credentials, redirect) {
         auth: {
             username: config.clientId,
             password: config.clientSecret
+        },
+        validateStatus: function (status) {
+            return status >= 200 && status < 500;
         }
     };
 
@@ -64,7 +67,7 @@ export function loginUser(credentials, redirect) {
         return axios(requestConfig)
             .then((response) =>  {
                 if (response.status !== 200) {
-                    dispatch(loginError({status: response.status, statusText: response.data.statusText}));
+                    dispatch(loginError({status: response.status, statusText: response.data.error_description}));
                 }
                 else {
                     dispatch(receiveLogin(response.data.access_token));
