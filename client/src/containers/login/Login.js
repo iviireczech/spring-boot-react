@@ -13,15 +13,13 @@ class Login extends Component {
     constructor(props) {
         super(props);
 
+        this.state = {
+            canSubmit: false
+        };
+
         this.enableSubmitButton = this.enableSubmitButton.bind(this);
         this.disableSubmitButton = this.disableSubmitButton.bind(this);
 
-    }
-
-    getInitialState() {
-        return {
-            canSubmit: false
-        }
     }
 
     enableSubmitButton() {
