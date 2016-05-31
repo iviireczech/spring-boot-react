@@ -64,11 +64,11 @@ class Login extends Component {
                                 Login
                             </SubmitButton>
                             {
-                                this.props.error
+                                this.props.errorMessage
                                 &&
                                 <FormGroup>
                                     <Alert bsStyle="danger" className="text-center">
-                                        {this.props.error.statusText}
+                                        {this.props.errorMessage}
                                     </Alert>
                                 </FormGroup>
                             }
@@ -84,21 +84,19 @@ class Login extends Component {
 function mapStateToProps(state) {
 
     return {
-        error: state.authentication.error
+        errorMessage: state.authentication.errorMessage
     }
     
 }
 
-function mapDispatchToProps(dispatch, ownProps) {
+function mapDispatchToProps(dispatch) {
 
     return {
         onSubmit: (data) => {
             const username = data.username.trim();
             const password = data.password.trim();
             const credentials = { username, password };
-            const location = ownProps.location;
-            const redirect = location.state && location.state.nextPathname;
-            dispatch(loginUser(credentials, redirect));
+            dispatch(loginUser(credentials));
         }
     }
 }

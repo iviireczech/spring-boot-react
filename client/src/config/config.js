@@ -5,6 +5,6 @@ const serverUrl = 'http://' + serverHost + (serverPort ? ':' + serverPort : '');
 module.exports = {
     clientId: 'web',
     clientSecret: '6b7b5d6028865dc2901f0b0db64cb291',
-    tokenUrl: serverUrl + '/oauth/token',
+    tokenEndpointUrl: serverUrl + '/oauth/token',
     apiUrl: serverUrl + '/api'
 };

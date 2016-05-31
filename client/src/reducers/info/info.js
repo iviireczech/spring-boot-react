@@ -16,7 +16,7 @@ export default function info(state = {
         case INFO_FAILURE:
             return Object.assign({}, state, {
                 isFetching: false,
-                error: action.payload.error
+                errorMessage: action.payload.errorMessage
             });
         default:
             return state

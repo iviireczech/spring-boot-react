@@ -1,12 +1,14 @@
 import { createStore, applyMiddleware, compose } from 'redux'
 import thunk from 'redux-thunk';
 import { routerMiddleware } from 'react-router-redux';
+import tokenEndpoint from '../middleware/token-endpoint';
+import api from '../middleware/api';
 
 import reducers from '../reducers/reducers';
 
 export default function configureStore(initialState = {}, history) {
 
-    const middleware = [thunk, routerMiddleware(history)];
+    const middleware = [thunk, routerMiddleware(history), tokenEndpoint, api];
 
     const enhancer = compose(
         applyMiddleware(...middleware),

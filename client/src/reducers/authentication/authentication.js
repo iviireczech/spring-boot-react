@@ -9,8 +9,7 @@ export default function authentication(state = {
         case LOGIN_REQUEST:
             return Object.assign({}, state, {
                 isFetching: true,
-                isAuthenticated: false,
-                credentials: action.payload.credentials
+                isAuthenticated: false
             });
         case LOGIN_SUCCESS:
             return Object.assign({}, state, {
@@ -21,7 +20,7 @@ export default function authentication(state = {
             return Object.assign({}, state, {
                 isFetching: false,
                 isAuthenticated: false,
-                error: action.payload.error
+                errorMessage: action.payload.errorMessage
             });
         case LOGOUT_REQUEST:
             return Object.assign({}, state, {
