@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { PageHeader, FormGroup, Alert } from 'react-bootstrap';
+import { Grid, Col, Row, PageHeader, FormGroup, Alert } from 'react-bootstrap';
 
 import { getInfo } from '../../actions/info/info';
 
@@ -12,22 +12,26 @@ class Info extends Component {
 
     render() {
         return (
-            <div>
-                {
-                    !this.props.errorMessage
-                    &&
-                    <PageHeader>{this.props.data}</PageHeader>
-                }
-                {
-                    this.props.errorMessage
-                    &&
-                    <FormGroup>
-                        <Alert bsStyle="danger" className="text-center">
-                            {this.props.errorMessage}
-                        </Alert>
-                    </FormGroup>
-                }
-            </div>
+            <Grid>
+                <Row>
+                    <Col md={12}>
+                        {
+                            !this.props.errorMessage
+                            &&
+                            <PageHeader>{this.props.data}</PageHeader>
+                        }
+                        {
+                            this.props.errorMessage
+                            &&
+                            <FormGroup>
+                                <Alert bsStyle="danger" className="text-center">
+                                    {this.props.errorMessage}
+                                </Alert>
+                            </FormGroup>
+                        }
+                    </Col>
+                </Row>
+            </Grid>
         );
     }
     

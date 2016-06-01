@@ -37,7 +37,7 @@ module.exports = {
             }
         }),
         new HtmlWebpackPlugin({
-            title: 'Spring & React Starter Kit',
+            title: 'Spring Boot & React Starter Kit',
             template: path.join(ABSOLUTE_BASE, 'src', 'assets', 'index.ejs'),
             favicon: path.join(ABSOLUTE_BASE, 'src', 'assets', 'favicon-96x96.png')
         })

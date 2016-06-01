@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
-import {Grid, Col, Row} from 'react-bootstrap';
 
 import Navbar from '../../components/navbar/Navbar';
 
@@ -31,13 +30,7 @@ class App extends React.Component {
                     isAuthenticated={this.props.isAuthenticated}
                     logout={this.props.logout}
                 />
-                <Grid>
-                    <Row>
-                        <Col md={12}>
-                            {this.props.children}
-                        </Col>
-                    </Row>
-                </Grid>
+                {this.props.children}
             </div>
         );
     }

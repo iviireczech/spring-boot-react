@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import Formsy from 'formsy-react';
-import { Row, Col, Alert,FormGroup } from 'react-bootstrap';
+import { Grid, Row, Col, Alert,FormGroup } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
 import FormInput from './../../components/form/input/FormInput';
@@ -37,45 +37,49 @@ class Login extends Component {
     render() {
 
         return (
-            <div>
-                <Formsy.Form
-                    className="form-horizontal"
-                    onValidSubmit={this.props.onSubmit}
-                    onValid={this.enableSubmitButton}
-                    onInvalid={this.disableSubmitButton}
-                >
-                    <Row>
-                        <Col md={3} mdOffset={4}>
-                            <FormInput
-                                id="username"
-                                name="username"
-                                type="text"
-                                placeholder="Username"
-                                required
-                            />
-                            <FormInput
-                                id="password"
-                                name="password"
-                                type="password"
-                                placeholder="Password"
-                                required
-                            />
-                            <SubmitButton bsStyle="primary" block type="submit" disabled={!this.state.canSubmit}>
-                                Login
-                            </SubmitButton>
-                            {
-                                this.props.errorMessage
-                                &&
-                                <FormGroup>
-                                    <Alert bsStyle="danger" className="text-center">
-                                        {this.props.errorMessage}
-                                    </Alert>
-                                </FormGroup>
-                            }
-                        </Col>
-                    </Row>
-                </Formsy.Form>
-            </div>
+            <Grid>
+                <Row>
+                    <Col md={12}>
+                        <Formsy.Form
+                            className="form-horizontal"
+                            onValidSubmit={this.props.onSubmit}
+                            onValid={this.enableSubmitButton}
+                            onInvalid={this.disableSubmitButton}
+                        >
+                            <Row>
+                                <Col md={3} mdOffset={4}>
+                                    <FormInput
+                                        id="username"
+                                        name="username"
+                                        type="text"
+                                        placeholder="Username"
+                                        required
+                                    />
+                                    <FormInput
+                                        id="password"
+                                        name="password"
+                                        type="password"
+                                        placeholder="Password"
+                                        required
+                                    />
+                                    <SubmitButton bsStyle="primary" block type="submit" disabled={!this.state.canSubmit}>
+                                        Login
+                                    </SubmitButton>
+                                    {
+                                        this.props.errorMessage
+                                        &&
+                                        <FormGroup>
+                                            <Alert bsStyle="danger" className="text-center">
+                                                {this.props.errorMessage}
+                                            </Alert>
+                                        </FormGroup>
+                                    }
+                                </Col>
+                            </Row>
+                        </Formsy.Form>
+                    </Col>
+                </Row>
+            </Grid>
         )
     }
 

@@ -1,39 +1,38 @@
 import React, { Component, PropTypes } from 'react';
-import { Navbar as NavbarBootstrap, Nav, Button } from 'react-bootstrap';
+import { Navbar as NavbarBootstrap, Nav, NavItem } from 'react-bootstrap';
 import {LinkContainer} from 'react-router-bootstrap';
 
 export default class Navbar extends Component {
 
     render() {
         return (
-            <NavbarBootstrap>
+            <NavbarBootstrap inverse staticTop>
                 <NavbarBootstrap.Header>
                     <NavbarBootstrap.Brand>
                         <LinkContainer to="/">
-                            <a href="/">Spring & React</a>
+                            <a href="/">Spring Boot & React</a>
                         </LinkContainer>
                     </NavbarBootstrap.Brand>
+                    <NavbarBootstrap.Toggle />
                 </NavbarBootstrap.Header>
-                <Nav pullRight>
-                    {
-                        !this.props.isAuthenticated
-                        &&
-                        <LinkContainer to="login">
-                            <NavbarBootstrap.Form>
-                                <Button bsStyle="primary" type="submit">Login</Button>
-                            </NavbarBootstrap.Form>
-                        </LinkContainer>
-                    }
-                    {
-                        this.props.isAuthenticated
-                        &&
-                        <LinkContainer to="/">
-                            <NavbarBootstrap.Form>
-                                <Button bsStyle="primary" type="submit" onClick={this.props.logout}>Logout</Button>
-                            </NavbarBootstrap.Form>
-                        </LinkContainer>
-                    }
-                </Nav>
+                <NavbarBootstrap.Collapse>
+                    <Nav pullRight>
+                        {
+                            !this.props.isAuthenticated
+                            &&
+                            <LinkContainer to="login">
+                                <NavItem>Login</NavItem>
+                            </LinkContainer>
+                        }
+                        {
+                            this.props.isAuthenticated
+                            &&
+                            <LinkContainer to="/">
+                                <NavItem onClick={this.props.logout}>Logout</NavItem>
+                            </LinkContainer>
+                        }
+                    </Nav>
+                </NavbarBootstrap.Collapse>
             </NavbarBootstrap>
         )
     }
