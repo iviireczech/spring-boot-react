@@ -1,13 +1,31 @@
-import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
+import React from 'react';
 import { Grid, Col, Row, PageHeader, FormGroup, Alert } from 'react-bootstrap';
 
-import { getInfo } from '../../actions/info/info';
+import { request } from '../../rest/api';
 
-class Info extends Component {
+export default class Info extends React.Component {
+
+    constructor() {
+        super();
+        this.state = {
+            errorMessage: null,
+            data: null
+        };
+    }
 
     componentDidMount() {
-        this.props.dispatch(getInfo());
+        request
+            .get('/info')
+            .then(data => {
+                this.setState({
+                    data: data
+                })
+            })
+            .catch(error => {
+                this.setState({
+                    errorMessage: error.errorMessage
+                })
+            });
     }
 
     render() {
@@ -16,16 +34,16 @@ class Info extends Component {
                 <Row>
                     <Col md={12}>
                         {
-                            !this.props.errorMessage
+                            !this.state.errorMessage
                             &&
-                            <PageHeader>{this.props.data}</PageHeader>
+                            <PageHeader>{this.state.data}</PageHeader>
                         }
                         {
-                            this.props.errorMessage
+                            this.state.errorMessage
                             &&
                             <FormGroup>
                                 <Alert bsStyle="danger" className="text-center">
-                                    {this.props.errorMessage}
+                                    {this.state.errorMessage}
                                 </Alert>
                             </FormGroup>
                         }
@@ -36,14 +54,3 @@ class Info extends Component {
     }
     
 }
-
-function mapStateToProps(state) {
-
-    return {
-        data: state.info.data,
-        errorMessage: state.info.errorMessage
-    }
-
-}
-
-export default connect(mapStateToProps)(Info)
