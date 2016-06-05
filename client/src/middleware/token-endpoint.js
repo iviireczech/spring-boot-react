@@ -81,14 +81,16 @@ export default store => next => action => {
                     )
                 }
             })
-            .catch(error => {console.log(error);next(
-                actionWith({
-                    payload: {
-                        errorMessage: error.statusText || 'Something bad happened'
-                    },
-                    type: failureType
-                })
-            )});
+            .catch(error =>
+                next(
+                    actionWith({
+                        payload: {
+                            errorMessage: error.statusText || 'Something bad happened'
+                        },
+                        type: failureType
+                    })
+                )
+            );
     } catch(error) {
         next(
             actionWith({
