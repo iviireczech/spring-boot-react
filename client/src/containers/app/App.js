@@ -18,7 +18,7 @@ class App extends React.Component {
             this.props.redirect(redirect || '/info');
         } else if (this.props.isAuthenticated && !nextProps.isAuthenticated) {
             // logout
-            this.props.redirect('/');
+            this.props.redirect('/login');
         }
     }
 

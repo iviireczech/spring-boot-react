@@ -1,5 +1,7 @@
 package com.github.iviireczech.springreact.config.security;
 
+import com.github.iviireczech.springreact.model.exceptions.OAuth2ExceptionRendererImpl;
+import com.github.iviireczech.springreact.model.exceptions.WebResponseExceptionTranslatorImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,7 +17,12 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
+import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.error.OAuth2AccessDeniedHandler;
+import org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint;
+import org.springframework.security.oauth2.provider.error.OAuth2ExceptionRenderer;
+import org.springframework.security.oauth2.provider.error.WebResponseExceptionTranslator;
 import org.springframework.security.oauth2.provider.token.AccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
@@ -28,6 +35,32 @@ public class OAuth2Config {
 
     @Value("${jwt.signing-key}")
     private String signingKey;
+
+    @Bean
+    public OAuth2ExceptionRenderer exceptionRenderer() {
+        return new OAuth2ExceptionRendererImpl();
+    }
+
+    @Bean
+    public WebResponseExceptionTranslator exceptionTranslator() {
+        return new WebResponseExceptionTranslatorImpl();
+    }
+
+    @Bean
+    public OAuth2AccessDeniedHandler oAuth2AccessDeniedHandler() {
+        OAuth2AccessDeniedHandler oAuth2AccessDeniedHandler = new OAuth2AccessDeniedHandler();
+        oAuth2AccessDeniedHandler.setExceptionRenderer(exceptionRenderer());
+        oAuth2AccessDeniedHandler.setExceptionTranslator(exceptionTranslator());
+        return oAuth2AccessDeniedHandler;
+    }
+
+    @Bean
+    public OAuth2AuthenticationEntryPoint oAuth2AuthenticationEntryPoint() {
+        OAuth2AuthenticationEntryPoint oAuth2AuthenticationEntryPoint = new OAuth2AuthenticationEntryPoint();
+        oAuth2AuthenticationEntryPoint.setExceptionRenderer(exceptionRenderer());
+        oAuth2AuthenticationEntryPoint.setExceptionTranslator(exceptionTranslator());
+        return oAuth2AuthenticationEntryPoint;
+    }
 
     @Bean
     public JwtAccessTokenConverter accessTokenConverter() {
@@ -46,6 +79,15 @@ public class OAuth2Config {
     protected static class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
 
         @Autowired
+        private OAuth2AccessDeniedHandler oAuth2AccessDeniedHandler;
+
+        @Autowired
+        private OAuth2AuthenticationEntryPoint oAuth2AuthenticationEntryPoint;
+
+        @Autowired
+        private WebResponseExceptionTranslator exceptionTranslator;
+
+        @Autowired
         @Qualifier("authenticationManagerBean")
         private AuthenticationManager authenticationManager;
 
@@ -61,6 +103,7 @@ public class OAuth2Config {
                     .authorizedGrantTypes("password", "refresh_token")
                     .authorities("ROLE_WEB")
                     .scopes("read", "write")
+                    .accessTokenValiditySeconds(10)
                     .resourceIds(RESOURCE_ID);
         }
 
@@ -69,8 +112,15 @@ public class OAuth2Config {
             endpoints
                     .authenticationManager(authenticationManager)
                     .accessTokenConverter(accessTokenConverter)
+                    .exceptionTranslator(exceptionTranslator)
                     .getFrameworkEndpointHandlerMapping().setOrder(Ordered.HIGHEST_PRECEDENCE);
 
+        }
+
+        @Override
+        public void configure(final AuthorizationServerSecurityConfigurer security) throws Exception {
+            security.accessDeniedHandler(oAuth2AccessDeniedHandler)
+                    .authenticationEntryPoint(oAuth2AuthenticationEntryPoint);
         }
 
     }
@@ -79,10 +129,18 @@ public class OAuth2Config {
     @EnableResourceServer
     protected static class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
+        @Autowired
+        private OAuth2AccessDeniedHandler oAuth2AccessDeniedHandler;
+
+        @Autowired
+        private OAuth2AuthenticationEntryPoint oAuth2AuthenticationEntryPoint;
+
         @Override
         public void configure(final ResourceServerSecurityConfigurer resources) throws Exception {
             resources
-                    .resourceId(RESOURCE_ID);
+                    .resourceId(RESOURCE_ID)
+                    .authenticationEntryPoint(oAuth2AuthenticationEntryPoint)
+                    .accessDeniedHandler(oAuth2AccessDeniedHandler);
         }
 
         @Override

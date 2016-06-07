@@ -1,5 +1,7 @@
-package com.github.iviireczech.springreact.controller.rest;
+package com.github.iviireczech.springreact.controller.rest.info;
 
+import com.github.iviireczech.springreact.controller.rest.AbstractRestController;
+import com.github.iviireczech.springreact.model.response.Response;
 import org.springframework.context.ApplicationContext;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,11 +12,11 @@ import java.util.concurrent.Callable;
 
 @RestController
 @RequestMapping("/api")
-public class ApiController {
+public class InfoController extends AbstractRestController {
 
     @RequestMapping(value = "/info", method = RequestMethod.GET)
-    public String test() {
-        return getInfo();
+    public Response<String> test() {
+        return getSuccessResponse(getInfo());
     }
 
     private String getInfo() {

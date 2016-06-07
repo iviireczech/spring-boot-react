@@ -13,7 +13,6 @@ function fetch(credentials) {
         transformRequest: (data) => formurlencoded(data),
         data: {
             grant_type: 'password',
-            scope: 'read+write',
             username: credentials.username,
             password: credentials.password
         },
@@ -63,18 +62,18 @@ export default store => next => action => {
                     next(
                         actionWith({
                             payload: {
-                                errorMessage: response.data.error_description || response.statusText
+                                errorMessage: response.data.message || response.statusText
                             },
                             type: failureType
                         })
                     )
                 }
                 else {
-                    localStorage.setItem('access_token', response.data.access_token);
+                    localStorage.setItem('access_token', response.data.data.access_token);
                     next(
                         actionWith({
                             payload: {
-                                data: response.data
+                                data: response.data.data
                             },
                             type: successType
                         })
@@ -85,7 +84,7 @@ export default store => next => action => {
                 next(
                     actionWith({
                         payload: {
-                            errorMessage: error.statusText || 'Something bad happened'
+                            errorMessage: error.message || 'Something bad happened'
                         },
                         type: failureType
                     })

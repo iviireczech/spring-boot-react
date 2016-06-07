@@ -32,17 +32,17 @@ export default class DataAccessService {
 
         this.instance.interceptors.response.use((response) => {
             dispatch(dataLoaded());
-            return response.data;
+            if (response.status == 401) {
+                dispatch(logoutUser());
+                return Promise.reject(response.data.data.message);
+            }
+            return response.data.data;
         }, (error) => {
             dispatch(dataLoaded());
-            if (!error.data) {
-                error.data = { errorMessage: "Internal Server Error" };
+            if (!error.message) {
+                error.message = "Internal Server Error";
             }
-            if (error.status == 401) {
-                dispatch(logoutUser());
-                return Promise.reject(error.data);
-            }
-            return Promise.reject(error.data);
+            return Promise.reject(error.message);
         });
 
     }
