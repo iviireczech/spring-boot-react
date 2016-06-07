@@ -1,9 +1,9 @@
-import DataAccessService from '../DataAccessService';
+import { ajaxService } from '../../main';
 
-export default class InfoService extends DataAccessService {
+export default class InfoService {
 
     getInfo() {
-        return this.get("/info");
+        return ajaxService.get("/info");
     }
 
 }

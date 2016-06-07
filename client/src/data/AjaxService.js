@@ -4,9 +4,9 @@ import axios from 'axios';
 import { logoutUser } from './../actions/logout/logout';
 import { loadingData, dataLoaded } from './../actions/data/pendingTasks';
 
-export default class DataAccessService {
+export default class AjaxService {
 
-    constructor(dispatch) {
+    constructor(store) {
         this.instance = axios.create({
             baseURL: config.apiUrl,
             headers: {
@@ -19,26 +19,26 @@ export default class DataAccessService {
         });
 
         this.instance.interceptors.request.use((config) => {
-            dispatch(loadingData());
+            store.dispatch(loadingData());
             const token = localStorage.getItem('access_token');
             if (token) {
                 config.headers['Authorization'] = `Bearer ${token}`;
             }
             return config;
         }, (error) => {
-            dispatch(dataLoaded());
+            store.dispatch(dataLoaded());
             return Promise.reject(error);
         });
 
         this.instance.interceptors.response.use((response) => {
-            dispatch(dataLoaded());
+            store.dispatch(dataLoaded());
             if (response.status == 401) {
-                dispatch(logoutUser());
+                store.dispatch(logoutUser(response.data.data.message));
                 return Promise.reject(response.data.data.message);
             }
             return response.data.data;
         }, (error) => {
-            dispatch(dataLoaded());
+            store.dispatch(dataLoaded());
             if (!error.message) {
                 error.message = "Internal Server Error";
             }

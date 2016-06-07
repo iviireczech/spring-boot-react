@@ -7,17 +7,18 @@ function requestLogout() {
     }
 }
 
-function receiveLogout() {
+function receiveLogout(errorMessage) {
     return {
-        type: LOGOUT_SUCCESS
+        type: LOGOUT_SUCCESS,
+        errorMessage: errorMessage
     }
 }
 
-export function logoutUser() {
+export function logoutUser(errorMessage) {
 
     return dispatch => {
         dispatch(requestLogout());
         localStorage.removeItem('access_token');
-        dispatch(receiveLogout());
+        dispatch(receiveLogout(errorMessage));
     }
 }
